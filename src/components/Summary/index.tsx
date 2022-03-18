@@ -3,12 +3,7 @@ import { Container, SummaryCard } from "./styles";
 
 import { Income, Outcome, Total } from "../../assets";
 
-interface ISummaryItems {
-  type: string;
-  title: string;
-  iconSrc: string;
-  value: number;
-}
+import { ISummaryItems } from "../../utils/types";
 
 export const Summary: FC = () => {
   const summaryItems: ISummaryItems[] = [
