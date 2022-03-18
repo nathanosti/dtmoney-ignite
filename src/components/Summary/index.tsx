@@ -27,7 +27,7 @@ export const Summary: FC = () => {
               <img src={card.iconSrc} alt="Card Icon" />
             </header>
 
-            <h1>R$ {card.value}</h1>
+            <h1>{card.value.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}</h1>
           </SummaryCard>
         ))}
       </Container>
