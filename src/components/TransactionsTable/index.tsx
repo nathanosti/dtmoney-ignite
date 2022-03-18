@@ -1,33 +1,17 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { Container, Table, TBodyContent } from "./styles";
+import { api } from "../../services/api";
+
+import { ITransactionsItems } from "../../utils/types";
 
 export const TransactionsTable: FC = () => {
-  interface ISummaryItems {
-    title: string;
-    price: number;
-    isPositive: boolean;
-    category: string;
-    date: string;
-  }
+  const [transactions, setTransactions] = useState<ITransactionsItems[]>([]);
 
-  const today = new Date().toLocaleDateString();
-
-  const tableDataArr: ISummaryItems[] = [
-    {
-      title: "Desenvolvimento de Site",
-      price: 1099.99,
-      isPositive: true,
-      category: "Venda",
-      date: today,
-    },
-    {
-      title: "Desenvolvimento de Site",
-      price: 50,
-      isPositive: false,
-      category: "Compra",
-      date: today,
-    },
-  ];
+  useEffect(() => {
+    api.get("/transactions").then((res) => {
+      setTransactions(res.data);
+    });
+  }, []);
 
   return (
     <>
@@ -43,14 +27,19 @@ export const TransactionsTable: FC = () => {
           </thead>
 
           <tbody>
-            {tableDataArr.map((item, index) => (
+            {transactions.map((item, index) => (
               <tr key={index}>
                 <TBodyContent>{item.title}</TBodyContent>
-                <TBodyContent textColor={item.isPositive ? 'var(--green)' : 'var(--red)'}>
-                  {item.price.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}
+                <TBodyContent
+                  textColor={item.isPositive ? "var(--green)" : "var(--red)"}
+                >
+                  {item.price.toLocaleString("pt-BR", {
+                    style: "currency",
+                    currency: "BRL",
+                  })}
                 </TBodyContent>
                 <TBodyContent>{item.category}</TBodyContent>
-                <TBodyContent>{item.date}</TBodyContent>
+                <TBodyContent>{item.createdAt}</TBodyContent>
               </tr>
             ))}
           </tbody>
