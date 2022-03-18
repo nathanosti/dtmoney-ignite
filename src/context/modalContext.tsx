@@ -12,7 +12,6 @@ const ModalProvider: FC = ({ children }) => {
 
   const toggleModal = () => {
     setIsOpen(!isOpen);
-    console.log("Modal esta: ", isOpen);
   };
 
   return (

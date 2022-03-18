@@ -6,9 +6,10 @@ export interface ISummaryItems {
 }
 
 export interface ITransactionsItems {
+  id: number;
   title: string;
   price: number;
   isPositive: boolean;
   category: string;
-  createdAt: string;
+  createdAt?: string;
 }
