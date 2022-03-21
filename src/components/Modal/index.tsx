@@ -1,7 +1,7 @@
 import { FC, FormEvent, useContext, useState } from "react";
-import { api } from "../../services/api";
 import Modal from "react-modal";
 import { modalContext } from "../../context/modalContext";
+import { transactionContext } from "../../context/transactionContext";
 
 import {
   Container,
@@ -19,6 +19,7 @@ Modal.setAppElement("#root");
 
 export const AddTransactionsModal: FC = () => {
   const { isOpen, toggleModal } = useContext(modalContext);
+  const { createTransaction } = useContext(transactionContext);
 
   const [title, setTitle] = useState<string>("");
   const [value, setValue] = useState<number>(0);
@@ -50,11 +51,10 @@ export const AddTransactionsModal: FC = () => {
       price: value,
       isPositive,
       category,
+      createdAt: new Date(),
     };
 
-    api.post("/transactions", data).then((res) => {
-      console.log(res);
-    });
+    createTransaction(data);
   };
 
   return (

@@ -1,50 +1,46 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useContext } from "react";
 import { Container, Table, TBodyContent } from "./styles";
-import { api } from "../../services/api";
-
-import { ITransactionsItems } from "../../utils/types";
 import { formatDate, formatCurrency } from "../../utils/formaters";
 
-export const TransactionsTable: FC = () => {
-  const [transactions, setTransactions] = useState<ITransactionsItems[]>([]);
+import { transactionContext } from "../../context/transactionContext";
 
-  useEffect(() => {
-    const getData = async () => {
-      await api.get("/transactions").then((res) => {
-        setTransactions(res.data);
-      });
-    };
-    getData();
-  }, []);
+export const TransactionsTable: FC = () => {
+  const { transactions, errorMessage } = useContext(transactionContext);
 
   return (
     <>
       <Container>
-        <Table>
-          <thead>
-            <tr>
-              <th>Título</th>
-              <th>Preço</th>
-              <th>Categoria</th>
-              <th>Data</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {transactions.map((item) => (
-              <tr key={item._id}>
-                <TBodyContent>{item.title}</TBodyContent>
-                <TBodyContent
-                  textColor={item.isPositive ? "var(--green)" : "var(--red)"}
-                >
-                  {formatCurrency(item.price)}
-                </TBodyContent>
-                <TBodyContent>{item.category}</TBodyContent>
-                <TBodyContent>{formatDate(item.createdAt)}</TBodyContent>
+        {transactions.length > 0 ? (
+          <Table>
+            <thead>
+              <tr>
+                <th>Título</th>
+                <th>Preço</th>
+                <th>Categoria</th>
+                <th>Data</th>
               </tr>
-            ))}
-          </tbody>
-        </Table>
+            </thead>
+
+            <tbody>
+              {transactions.map((item: any, index: any) => (
+                <tr key={index}>
+                  <TBodyContent>{item.title}</TBodyContent>
+                  <TBodyContent
+                    textColor={item.isPositive ? "var(--green)" : "var(--red)"}
+                  >
+                    {formatCurrency(item.price)}
+                  </TBodyContent>
+                  <TBodyContent>{item.category}</TBodyContent>
+                  <TBodyContent>
+                    {formatDate(item.createdAt ? item.createdAt : "00/00/00")}
+                  </TBodyContent>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        ) : (
+          <span>{errorMessage}</span>
+        )}
       </Container>
     </>
   );
