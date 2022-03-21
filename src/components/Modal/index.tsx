@@ -47,12 +47,14 @@ export const AddTransactionsModal: FC = () => {
 
     const data = {
       title,
-      value,
+      price: value,
       isPositive,
       category,
     };
 
-    api.post("/transactions", data);
+    api.post("/transactions", data).then((res) => {
+      console.log(res);
+    });
   };
 
   return (
@@ -73,7 +75,6 @@ export const AddTransactionsModal: FC = () => {
 
             <Input
               placeholder="valor"
-              value={value}
               onChange={(e) => setValue(Number(e.target.value))}
               type="number"
             />

@@ -3,14 +3,18 @@ import { Container, Table, TBodyContent } from "./styles";
 import { api } from "../../services/api";
 
 import { ITransactionsItems } from "../../utils/types";
+import { formatDate, formatCurrency } from "../../utils/formaters";
 
 export const TransactionsTable: FC = () => {
   const [transactions, setTransactions] = useState<ITransactionsItems[]>([]);
 
   useEffect(() => {
-    api.get("/transactions").then((res) => {
-      setTransactions(res.data);
-    });
+    const getData = async () => {
+      await api.get("/transactions").then((res) => {
+        setTransactions(res.data);
+      });
+    };
+    getData();
   }, []);
 
   return (
@@ -27,19 +31,16 @@ export const TransactionsTable: FC = () => {
           </thead>
 
           <tbody>
-            {transactions.map((item, index) => (
-              <tr key={index}>
+            {transactions.map((item) => (
+              <tr key={item._id}>
                 <TBodyContent>{item.title}</TBodyContent>
                 <TBodyContent
                   textColor={item.isPositive ? "var(--green)" : "var(--red)"}
                 >
-                  {item.price.toLocaleString("pt-BR", {
-                    style: "currency",
-                    currency: "BRL",
-                  })}
+                  {formatCurrency(item.price)}
                 </TBodyContent>
                 <TBodyContent>{item.category}</TBodyContent>
-                <TBodyContent>{item.createdAt}</TBodyContent>
+                <TBodyContent>{formatDate(item.createdAt)}</TBodyContent>
               </tr>
             ))}
           </tbody>
