@@ -15,7 +15,9 @@ const transactionContext = createContext<ITransactionContext>(
 
 const TransactionProvider: FC = ({ children }) => {
   const [transactions, setTransactions] = useState<ITransactionsItems[]>([]);
-  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>(
+    "Algo de errado não está certo"
+  );
 
   //Primeira busca ao entrar na página:
   useEffect(() => {
@@ -33,7 +35,7 @@ const TransactionProvider: FC = ({ children }) => {
             setErrorMessage("OPSS... NADA LOCALIZADO!");
             break;
           default:
-            setErrorMessage("'Algo de errado não está certo'");
+            setErrorMessage("Verifica API");
         }
       })
       .catch((err) => {
